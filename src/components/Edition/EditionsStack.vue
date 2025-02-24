@@ -1,38 +1,23 @@
 <script setup>
-import {inject, ref, watch} from 'vue';
+import { ref, watch} from 'vue';
 import {useRoute, useRouter} from "vue-router";
-import ErrorHandler from "@/components/ErrorHandler.vue";
+import { api } from "@/helpers/api.service.js";
 
-const errors = ref([]);
-const api = inject("api");
 const router = useRouter();
 const route = useRoute();
 const items = ref([]);
 const showDeleteModal = ref(false);
 const itemToDelete = ref(null);
-const page = ref(Number(route.query.page) || 1);
+const page = ref(+route.query.page || 1);
 
 const loadItems = async () => {
-  try {
-    errors.value = [];
-
-    const response = await api.get(`/editions/all?page=${page.value}`);
-    items.value = response.data;
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
+    items.value = await api.get(`/editions/all?page=${page.value}`);
 };
 
 const deleteItem = async () => {
-  try {
-    errors.value = [];
-
-    await api.delete(`/admin/edition/${itemToDelete.value}`);
+    await api.remove(`/admin/edition/${itemToDelete.value}`);
     showDeleteModal.value = false;
     await loadItems();
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 };
 
 const openDeleteModal = (id) => {
@@ -46,36 +31,21 @@ const closeDeleteModal = () => {
 };
 
 const routeTo = (route) => {
-  try {
     router.push(route);
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 }
 
 const changePage = (newPage) => {
-  try {
     page.value = newPage;
     router.push({query: {...route.query, page: newPage}});
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 };
 
 const convertToEmbedUrl = (url) => {
-  const youtubeRegex =
-      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+  const videoId = url.split('v=')[1];
 
-  if (youtubeRegex.test(url)) {
-    const videoId = url.match(youtubeRegex)[1]; // Виділяємо ідентифікатор відео
-    return `https://www.youtube.com/embed/${videoId}`;
-  }
-
-  return url;
+  return `https://www.youtube.com/embed/${videoId}`;
 }
 
 const formatDate = (dateString) => {
-  try {
     const date = new Date(dateString);
     return date.toLocaleString('uk-UA', {
       year: 'numeric',
@@ -84,18 +54,11 @@ const formatDate = (dateString) => {
       hour: '2-digit',
       minute: '2-digit',
     });
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 };
 
 watch(() => route.query.page, async (newPage) => {
-  try {
-    page.value = Number(newPage) || 1;
+    page.value = +newPage || 1;
     await loadItems();
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 }, { immediate: true });
 </script>
 
@@ -140,8 +103,6 @@ watch(() => route.query.page, async (newPage) => {
       </div>
     </div>
   </div>
-
-  <ErrorHandler :errors="errors"/>
 </template>
 
 <style scoped>

@@ -1,18 +1,14 @@
 <script setup>
 import {ref} from 'vue'
 import { useRouter } from "vue-router";
-import ErrorHandler from "@/components/ErrorHandler.vue";
-import axios from "axios";
+import { api } from "@/helpers/api.service.js";
+import { errors } from "@/helpers/errors.js"
 
+const router = useRouter();
 const login = ref('');
 const password = ref('');
-const errors = ref([]);
-const router = useRouter();
 
 const fetchData = async () => {
-  try {
-    errors.value = [];
-
     if (!login.value || !password.value) {
       errors.value.push('Логін і пароль є обов’язковими');
       return;
@@ -23,11 +19,8 @@ const fetchData = async () => {
       password: password.value
     };
 
-    await axios.post('http://localhost:3000/auth/login', data, { withCredentials: true });
+    await api.post('/auth/login', data);
     await router.push('/');
-  } catch (error) {
-    errors.value.push(error?.response?.data?.errors);
-  }
 };
 </script>
 
@@ -36,7 +29,6 @@ const fetchData = async () => {
     <input type="text" v-model="login" placeholder="Login" class="input-field" />
     <input type="password" v-model="password" placeholder="Password" class="input-field" />
     <button class="submit-button" @click="fetchData">Sign In</button>
-    <ErrorHandler :errors="errors"/>
   </div>
 </template>
 

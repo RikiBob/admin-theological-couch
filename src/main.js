@@ -10,7 +10,7 @@ import QuestionStack from "@/components/Question/QuestionsStack.vue";
 import QuestionsHistory from "@/components/Question/QuestionsHistory.vue";
 import FormForAnswer from "@/components/Question/FormForAnswer.vue";
 
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(),
     routes: [{
         name: 'Home',

@@ -1,41 +1,25 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
-import {inject, ref, watch} from "vue";
-import ErrorHandler from "@/components/ErrorHandler.vue";
+import { ref, watch } from "vue";
+import { api } from "@/helpers/api.service.js"
 
-const api = inject('api')
-const errors = ref([]);
 const router = useRouter();
 const route = useRoute();
 const items = ref([]);
 const sortOrder = ref('ASC');
-const page = ref(Number(route.query.page) || 1);
+const page = ref(+route.query.page || 1);
 
 const routeTo = (route) => {
-  try {
-    router.push(route);
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
+  router.push(route);
 }
 
 const loadItems = async () => {
-  try {
-    errors.value = [];
-    const response = await api.get(`/questions/unanswered?page=${page.value}&sortOrder=${sortOrder.value}`) ;
-    items.value = response.data;
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
+    items.value = await api.get(`/questions/unanswered?page=${page.value}&sortOrder=${sortOrder.value}`);
 };
 
 const changePage = (newPage) => {
-  try {
     page.value = newPage;
     router.push({query: {...route.query, page: newPage}});
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 };
 
 const toggleSortOrder = async () => {
@@ -44,7 +28,6 @@ const toggleSortOrder = async () => {
 };
 
 const formatDate = (dateString) => {
-  try {
     const date = new Date(dateString);
     return date.toLocaleString('uk-UA', {
       year: 'numeric',
@@ -53,23 +36,15 @@ const formatDate = (dateString) => {
       hour: '2-digit',
       minute: '2-digit',
     });
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 };
 
 const answer = (id) => {
-  console.log(id.toString());
   router.push({path: '/answer/form', query: {id: id.toString()}});
 }
 
 watch(() => route.query.page, async (newPage) => {
-  try {
-    page.value = Number(newPage) || 1;
+    page.value = +newPage || 1;
     await loadItems();
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
 }, { immediate: true });
 </script>
 
@@ -105,8 +80,6 @@ watch(() => route.query.page, async (newPage) => {
       <button v-if="items.length !== 0" @click="changePage(page + 1)" class="pagination-btn">Наступна →</button>
     </div>
   </div>
-
-  <ErrorHandler :errors="errors"/>
 </template>
 
 <style scoped>
@@ -233,6 +206,7 @@ watch(() => route.query.page, async (newPage) => {
   align-items: center;
   gap: 12px;
   margin-top: 20px;
+  width: 100%;
 }
 
 .pagination-btn {
@@ -260,5 +234,6 @@ watch(() => route.query.page, async (newPage) => {
   font-size: 18px;
   color: #777;
   margin: 20px 0;
+  width: 100%;
 }
 </style>

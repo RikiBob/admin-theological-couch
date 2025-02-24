@@ -11,7 +11,7 @@ const removeError = (index) => {
 </script>
 
 <template>
-  <div v-if="errors.length" class="error-container">
+  <div class="error-container">
     <div v-for="(error, index) in errors" :key="index" class="error-box">
       <span>{{ error }}</span>
       <button @click="removeError(index)" class="close-btn">✖</button>

@@ -1,21 +1,18 @@
 <script setup>
-import ErrorHandler from "@/components/ErrorHandler.vue";
-import {inject, ref, watch} from "vue";
+import { ref, watch } from "vue";
 import {useRoute, useRouter} from "vue-router";
+import { api } from "@/helpers/api.service.js";
+import { errors } from '@/helpers/errors.js'
 
-const questionSummary = ref("");
-const urlAnswer = ref("");
-const errors = ref([]);
 const router = useRouter();
 const route = useRoute();
-const api = inject('api')
+const questionSummary = ref("");
+const urlAnswer = ref("");
 const idQuestion = ref(route.query.id || "");
+const showSuccessMessage = ref(false);
 
 const formSubmit = async () => {
-  try {
-    errors.value = [];
-
-    if (!questionSummary.value || !urlAnswer.value) {
+    if (!questionSummary.value.trim() || !urlAnswer.value.trim()) {
       errors.value.push('Поля обов\`язкові для заповнення');
       return;
     }
@@ -25,11 +22,18 @@ const formSubmit = async () => {
       url: urlAnswer.value,
     };
 
-    await api.patch(`/admin/answer/${idQuestion.value}`, data);
-    routeTo('/questions');
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
+    const response = await api.patch(`/admin/answer/${idQuestion.value}`, data);
+
+     if (response.ok) {
+        showSuccessMessage.value = true;
+
+        questionSummary.value = '';
+        urlAnswer.value = '';
+
+        setTimeout(() => {
+        showSuccessMessage.value = false;
+        }, 3000);
+     }
 }
 
 const routeTo = (route) => {
@@ -38,25 +42,28 @@ const routeTo = (route) => {
 
 watch(() => route.query.id, (id) => {
   idQuestion.value = id;
-  console.log(id);
 })
 </script>
 
 <template>
   <div class="content-wrapper">
     <form @submit.prevent="submitForm" class="edition-form">
-      <h3>Edition</h3>
+      <h3>Форма для відповіді</h3>
       <input type="text" v-model="questionSummary" placeholder="Коротка назва" class="input-field" />
       <input type="url" v-model="urlAnswer" placeholder="Посилання для відео" class="input-field" />
       <button type="submit" class="submit-button" @click="formSubmit">Відповісти</button>
       <button type="submit" class="submit-button" @click="routeTo('/questions')">Назад</button>
     </form>
   </div>
-  <ErrorHandler :errors="errors"/>
+  <div v-if="showSuccessMessage" class="success-message">
+    ✅ Відповідь успішно відправлена!
+  </div>
 </template>
 
 <style scoped>
 .content-wrapper{
+  display: flex;
+  justify-content: center;
   width: 1000px;
 }
 
@@ -103,5 +110,14 @@ watch(() => route.query.id, (id) => {
 .submit-button:hover {
   background-color: #9e8f75;
   transform: scale(1.05);
+}
+
+.success-message {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
 }
 </style>

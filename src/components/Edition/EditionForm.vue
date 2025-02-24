@@ -1,19 +1,16 @@
 <script setup>
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import {useRouter} from "vue-router";
-import ErrorHandler from "@/components/ErrorHandler.vue";
+import { api } from "@/helpers/api.service.js"
+import { errors } from "@/helpers/errors.js"
 
-const api = inject("api");
 const router = useRouter();
 const name = ref("");
 const urlVideo = ref("");
-const errors = ref([]);
+const showSuccessMessage = ref(false);
 
 const formSubmit = async () => {
-  try {
-    errors.value = [];
-
-    if (!name.value || !urlVideo.value) {
+    if (!name.value.trim() || !urlVideo.value.trim()) {
       errors.value.push('Поля обов\`язкові для заповнення');
       return;
     }
@@ -23,11 +20,18 @@ const formSubmit = async () => {
       url_video: urlVideo.value,
     };
 
-    await api.post('/admin/edition', data);
-    routeTo('/editions');
-  } catch (error) {
-    errors.value.push(error?.response?.data);
-  }
+    const response = await api.post('/admin/edition', data);
+
+    if (response.ok) {
+      showSuccessMessage.value = true;
+
+      name.value = '';
+      urlVideo.value = '';
+
+      setTimeout(() => {
+        showSuccessMessage.value = false;
+      }, 3000);
+    }
 }
 
 const routeTo = (route) => {
@@ -38,19 +42,23 @@ const routeTo = (route) => {
 <template>
   <div class="content-wrapper">
   <form @submit.prevent="submitForm" class="edition-form">
-    <h3>Edition</h3>
+    <h3>Форма для нового випуску</h3>
     <input type="text" v-model="name" placeholder="Назва випуску" class="input-field" />
     <input type="url" v-model="urlVideo" placeholder="Посилання на відео" class="input-field" />
     <button type="submit" class="submit-button" @click="formSubmit">Зберегти</button>
     <button type="submit" class="submit-button" @click="routeTo('/editions')">Назад</button>
   </form>
   </div>
-  <ErrorHandler :errors="errors"/>
+  <div v-if="showSuccessMessage" class="success-message">
+    ✅ Дані успішно збережено!
+  </div>
 </template>
 
 <style scoped>
 .content-wrapper{
   width: 1000px;
+  display: flex;
+  justify-content: center;
 }
 
 .edition-form {
@@ -96,5 +104,14 @@ const routeTo = (route) => {
 .submit-button:hover {
   background-color: #9e8f75;
   transform: scale(1.05);
+}
+
+.success-message {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
 }
 </style>

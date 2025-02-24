@@ -1,102 +1,30 @@
 <script setup>
-import {computed, defineProps, ref, provide} from "vue";
+import {computed} from "vue";
 import {useRouter, useRoute} from "vue-router";
-import axios from "axios";
 import ErrorHandler from "@/components/ErrorHandler.vue";
+import { errors } from "@/helpers/errors.js";
 
-const url = import.meta.env.VITE_SERVER_URL;
 const router = useRouter();
 const route = useRoute();
-const errors = ref([]);
-const api = axios.create({
-  baseURL: url,
-  withCredentials: true,
-});
-
-let isRefreshing = false;
-let subscribers = [];
-
-const subscribeTokenRefresh = (callback) => {
-  subscribers.push(callback);
-};
-
-const onRefreshed = (token) => {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  subscribers.forEach((callback) => callback(token));
-  subscribers = [];
-};
-
-api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      console.log('Intercepted error:', error);
-      const originalRequest = error.config;
-
-      if (error.response && error.response.status === 500 && !originalRequest._retry) {
-        console.log('Handling 500 error');
-
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            subscribeTokenRefresh(
-                (token) => {
-                  originalRequest.headers['Authorization'] = `Bearer ${token}`;
-                  resolve(api(originalRequest));
-                },
-                reject(error)
-            );
-          });
-        }
-
-        originalRequest._retry = true;
-        isRefreshing = true;
-
-        try {
-          const response = await api.post('/auth/refresh');
-
-          errors.value = [];
-          isRefreshing = false;
-          onRefreshed(response.data.accessToken);
-
-          return api(originalRequest);
-        } catch (refreshError) {
-          isRefreshing = false;
-          subscribers = [];
-          errors.value.push(refreshError?.response?.data?.message);
-
-          await router.push('/login');
-
-          return Promise.reject(refreshError);
-        }
-      }
-
-      return Promise.reject(error);
-    }
-);
 
 const routeTo = (route) => {
   router.push(route);
 };
 
 const showTopBar = computed(() => route.path !== "/login");
-
-provide("api", api);
-
-defineProps({
-  errors: Array,
-});
 </script>
 
 <template>
   <div v-if="showTopBar">
    <div class="top-bar">
       <div class="top-bar-item" @click="routeTo('/editions')">
-       Edition
+       Випуски
      </div>
 
      <div class="separator"></div>
 
       <div class="top-bar-item" @click="routeTo('/questions')">
-       Question
+       Питання
      </div>
    </div>
 
@@ -108,7 +36,7 @@ defineProps({
   </div>
 
   <div v-if="!showTopBar"><RouterView/></div>
-  <ErrorHandler :errors="errors" />
+  <ErrorHandler v-if="errors.length" :errors="errors" />
 </template>
 
 <style scoped>
