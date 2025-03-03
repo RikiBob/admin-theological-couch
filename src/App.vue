@@ -3,6 +3,7 @@ import {computed} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import ErrorHandler from "@/components/ErrorHandler.vue";
 import { errors } from "@/helpers/errors.js";
+import {api} from "@/helpers/api.service.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -12,12 +13,17 @@ const routeTo = (route) => {
 };
 
 const showTopBar = computed(() => route.path !== "/login");
+
+const logout = async () => {
+  await api.post('/auth/logout');
+  await router.push('/login');
+}
 </script>
 
 <template>
   <div v-if="showTopBar">
    <div class="top-bar">
-      <div class="top-bar-item" @click="routeTo('/editions')">
+      <div class="top-bar-item left" @click="routeTo('/editions')">
        Випуски
      </div>
 
@@ -26,6 +32,7 @@ const showTopBar = computed(() => route.path !== "/login");
       <div class="top-bar-item" @click="routeTo('/questions')">
        Питання
      </div>
+     <button @click="logout" class="logout-button">Вихід</button>
    </div>
 
    <div class="content-wrapper">
@@ -70,6 +77,10 @@ body, html {
   cursor: pointer;
 }
 
+.left {
+  margin-left: 85px;
+}
+
 .top-bar-item:hover {
   background-color: #9e8f75;
   color: #ffffff;
@@ -99,5 +110,27 @@ body, html {
   width: 100%;
   min-height: 300px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  margin-right: 10px;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-left: 20px;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+}
+
+.logout-button:focus {
+  outline: none;
 }
 </style>

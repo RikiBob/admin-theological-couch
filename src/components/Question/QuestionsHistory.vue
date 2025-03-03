@@ -6,7 +6,7 @@ import { api } from "@/helpers/api.service.js";
 const router = useRouter();
 const route = useRoute();
 const items = ref([]);
-const sortOrder = ref('ASC');
+const sortOrder = ref('DESC');
 const page = ref(+route.query.page || 1);
 
 const routeTo = (route) => {

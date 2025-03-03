@@ -4,18 +4,10 @@ import { router } from '@/main.js';
 const baseURL =  import.meta.env.VITE_SERVER_URL;
 
 const refreshToken = async () => {
-
-    const response = await fetch(`${baseURL}/auth/refresh`, {
+    return await fetch(`${baseURL}/auth/refresh`, {
         method: "POST",
         credentials: "include",
-    });
-
-    if (response.ok) {
-        return response;
-    } else {
-        await router.push('/login');
-        throw new Error('Failed to refresh token');
-    }
+    });;
 };
 
 const request = async (url, options = {}) => {
@@ -26,11 +18,16 @@ const request = async (url, options = {}) => {
             credentials: "include",
         });
 
+        let data = null;
+
         if (url === '/auth/login' && !response.ok) {
-            const data = await response.json();
-            throw new Error(data.errors[0].message);
-        } else if(response.status === 500) {
-            const data = await response.json();
+            data = await response.json();
+            console.log(data);
+            throw new Error(data?.errors[0]?.message || 'Login failed');
+        }
+
+        if (response.status === 401) {
+            data = await response.json();
             if (data.message === 'Unauthorized') {
                 await refreshToken();
 
@@ -38,9 +35,20 @@ const request = async (url, options = {}) => {
                     ...options,
                     credentials: "include",
                 });
+
+                if (!response.ok) {
+                    await router.push('/login');
+                    throw new Error(`Request failed after token refresh: ${response.status}`);
+                }
             } else {
-                throw new Error(data.message);
+                throw new Error(data?.errors[0]?.message);
             }
+        }
+
+        if (!response.ok) {
+            data = await response.json();
+            console.log(data)
+            throw new Error(data?.errors[0]?.message || `Request failed with status ${response.status}`);
         }
 
         return response;
@@ -52,8 +60,7 @@ const request = async (url, options = {}) => {
 
 export const api =  {
     get: async (url) => {
-        const response = await request(url, { method: 'GET' });
-        return await response.json();
+        return (await request(url, {method: 'GET'})).json();
     },
 
     post: async (url, body) => {

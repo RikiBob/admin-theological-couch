@@ -9,14 +9,14 @@ const login = ref('');
 const password = ref('');
 
 const fetchData = async () => {
-    if (!login.value || !password.value) {
+    if (!login.value.trim() || !password.value.trim()) {
       errors.value.push('Логін і пароль є обов’язковими');
       return;
     }
 
     const data = {
-      login: login.value,
-      password: password.value
+      login: login.value.trim(),
+      password: password.value.trim()
     };
 
     await api.post('/auth/login', data);
