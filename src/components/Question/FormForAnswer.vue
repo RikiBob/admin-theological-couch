@@ -64,7 +64,7 @@ watch(() => route.query.id, (id) => {
 .content-wrapper{
   display: flex;
   justify-content: center;
-  width: 1000px;
+  width: 100%;
 }
 
 .edition-form {
@@ -119,5 +119,40 @@ watch(() => route.query.id, (id) => {
   color: #155724;
   border: 1px solid #c3e6cb;
   border-radius: 5px;
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 768px) {
+  .edition-form {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .input-field {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .submit-button {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-field {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .submit-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .success-message {
+    font-size: 14px;
+    padding: 8px;
+  }
 }
 </style>

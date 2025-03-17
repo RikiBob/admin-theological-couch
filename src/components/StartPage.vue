@@ -22,7 +22,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 1000px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .info-item {
@@ -30,5 +32,28 @@
   padding: 20px;
   text-align: center;
   font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .info-item {
+    font-size: 16px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding: 5px;
+  }
+
+  .info-item {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 </style>

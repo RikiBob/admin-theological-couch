@@ -110,7 +110,7 @@ watch(() => route.query.page, async (newPage) => {
   margin: 0;
   display: flex;
   flex-direction: column;
-  width: 1000px;
+  width: 100%;
 }
 
 .item-list {
@@ -157,7 +157,6 @@ watch(() => route.query.page, async (newPage) => {
   transition: transform 0.2s, background-color 0.2s;
 }
 
-
 .btn:hover {
   background-color: #9e8f75;
   transform: scale(1.05);
@@ -166,6 +165,8 @@ watch(() => route.query.page, async (newPage) => {
 iframe {
   margin-top: 10px;
   border: none;
+  width: 100%;
+  max-width: 600px;
 }
 
 .formatted-date {
@@ -200,11 +201,11 @@ iframe {
 }
 
 .modal {
-
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   text-align: center;
 }
 
@@ -248,4 +249,58 @@ iframe {
   color: #777;
   margin: 20px 0;
 }
+
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .item {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .modal {
+    width: 90%;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  iframe {
+    width: 100%;
+  }
+
+  .item-details {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .btn {
+    font-size: 16px;
+  }
+
+  .item {
+    padding: 8px;
+  }
+
+  .pagination-btn {
+    font-size: 14px;
+  }
+}
 </style>
+

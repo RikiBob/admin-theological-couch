@@ -92,6 +92,7 @@ body, html {
   background-color: #9e8f75;
 }
 
+/* Content wrapper and Info box */
 .content-wrapper {
   display: flex;
   justify-content: center;
@@ -112,6 +113,7 @@ body, html {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* Logout button styling */
 .logout-button {
   background-color: #f44336;
   color: white;
@@ -133,4 +135,63 @@ body, html {
 .logout-button:focus {
   outline: none;
 }
+
+/* Responsive Design for Mobile */
+@media screen and (max-width: 768px) {
+  .top-bar {
+    height: 60px;
+  }
+
+  .top-bar-item {
+    font-size: 16px;
+  }
+
+  .content-wrapper {
+    padding: 20px;
+  }
+
+  .info-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .logout-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .top-bar-item {
+    line-height: 40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .top-bar {
+    height: 50px;
+  }
+
+  .top-bar-item {
+    font-size: 14px;
+    padding: 5px;
+  }
+
+  .content-wrapper {
+    padding: 10px;
+  }
+
+  .info-box {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .logout-button {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  .separator {
+    display: none;
+  }
+}
 </style>
+

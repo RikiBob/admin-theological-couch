@@ -68,4 +68,39 @@ const removeError = (index) => {
 .close-btn:hover {
   color: darkred;
 }
+
+@media (max-width: 768px) {
+  .error-container {
+    max-width: 95%;
+    padding: 12px;
+  }
+
+  .error-box {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .close-btn {
+    margin-left: 0;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .error-box {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .close-btn {
+    font-size: 14px;
+  }
+}
 </style>

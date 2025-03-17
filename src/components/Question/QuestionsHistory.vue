@@ -88,7 +88,7 @@ watch(() => route.query.page, async (newPage) => {
   margin: 0;
   display: flex;
   flex-direction: column;
-  width: 1000px;
+  width: 100%;
 }
 
 .button-container {
@@ -104,9 +104,8 @@ watch(() => route.query.page, async (newPage) => {
   display: flex;
   align-items: center;
   gap: 5px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin: 0 auto;
 }
 
 .btn {
@@ -121,12 +120,10 @@ watch(() => route.query.page, async (newPage) => {
   transition: transform 0.2s, background-color 0.2s;
 }
 
-
 .btn:hover {
   background-color: #9e8f75;
   transform: scale(1.05);
 }
-
 
 .sort-text {
   font-size: 16px;
@@ -247,4 +244,101 @@ watch(() => route.query.page, async (newPage) => {
   margin: 20px 0;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    width: 100%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: auto;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .item-details {
+    width: 100%;
+  }
+
+  .question-title {
+    font-size: 18px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .sort-container {
+    width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+  }
+
+  .sort-btn {
+    font-size: 18px;
+  }
+
+  .no-items {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  .pagination-btn {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  .item {
+    min-height: 160px;
+    padding: 10px;
+  }
+
+  .question-title {
+    font-size: 16px;
+  }
+
+  .question-text, .answer-text {
+    font-size: 16px;
+  }
+
+  .answer-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .sort-container {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
+}
 </style>
+

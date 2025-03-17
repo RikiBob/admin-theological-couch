@@ -84,4 +84,28 @@ const fetchData = async () => {
   background-color: #9e8f75;
   transform: scale(1.05) translateY(-2px);
 }
+
+@media (max-width: 768px) {
+  .input-field {
+    width: 80%;
+    font-size: 14px;
+  }
+
+  .submit-button {
+    width: 80%;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-field {
+    width: 90%;
+    font-size: 14px;
+  }
+
+  .submit-button {
+    width: 90%;
+    font-size: 14px;
+  }
+}
 </style>

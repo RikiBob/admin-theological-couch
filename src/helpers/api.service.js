@@ -7,7 +7,7 @@ const refreshToken = async () => {
     return await fetch(`${baseURL}/auth/refresh`, {
         method: "POST",
         credentials: "include",
-    });;
+    });
 };
 
 const request = async (url, options = {}) => {
@@ -22,7 +22,6 @@ const request = async (url, options = {}) => {
 
         if (url === '/auth/login' && !response.ok) {
             data = await response.json();
-            console.log(data);
             throw new Error(data?.errors[0]?.message || 'Login failed');
         }
 
@@ -47,7 +46,6 @@ const request = async (url, options = {}) => {
 
         if (!response.ok) {
             data = await response.json();
-            console.log(data)
             throw new Error(data?.errors[0]?.message || `Request failed with status ${response.status}`);
         }
 

@@ -55,8 +55,8 @@ const routeTo = (route) => {
 </template>
 
 <style scoped>
-.content-wrapper{
-  width: 1000px;
+.content-wrapper {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -114,4 +114,39 @@ const routeTo = (route) => {
   border: 1px solid #c3e6cb;
   border-radius: 5px;
 }
+
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .edition-form {
+    width: 100%;
+  }
+
+  .input-field {
+    font-size: 14px;
+  }
+
+  .submit-button {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .input-field {
+    font-size: 14px;
+  }
+
+  .submit-button {
+    font-size: 14px;
+  }
+
+  .success-message {
+    font-size: 14px;
+  }
+}
 </style>
+

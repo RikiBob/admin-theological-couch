@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import './assets/main.css'
-import {createApp, nextTick} from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import LoginFormView from "@/components/LoginForm.vue";
 import EditionForm from "@/components/Edition/EditionForm.vue";
