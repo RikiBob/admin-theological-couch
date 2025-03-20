@@ -165,8 +165,8 @@ watch(() => route.query.page, async (newPage) => {
 iframe {
   margin-top: 10px;
   border: none;
-  width: 100%;
-  max-width: 600px;
+  max-width: 300px;
+  width: 70%;
 }
 
 .formatted-date {
