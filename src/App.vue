@@ -50,7 +50,6 @@ const logout = async () => {
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
   overflow-y: auto;
 }
 
@@ -95,12 +94,11 @@ body, html {
 /* Content wrapper and Info box */
 .content-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
   flex-grow: 1;
+  justify-content: center;
   margin-top: 50px;
   padding: 50px;
+  box-sizing: border-box;
 }
 
 .info-box {
@@ -108,8 +106,7 @@ body, html {
   color: #111;
   border-radius: 20px;
   padding: 40px;
-  width: 100%;
-  min-height: 300px;
+  width: 80%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
