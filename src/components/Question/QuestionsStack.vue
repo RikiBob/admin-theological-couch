@@ -8,6 +8,8 @@ const route = useRoute();
 const items = ref([]);
 const sortOrder = ref('ASC');
 const page = ref(+route.query.page || 1);
+const showDeleteModal = ref(false);
+const itemToDelete = ref(null);
 
 const routeTo = (route) => {
   router.push(route);
@@ -42,6 +44,22 @@ const answer = (id) => {
   router.push({path: '/answer/form', query: {id: id.toString()}});
 }
 
+const deleteItem = async (id) => {
+  await api.remove(`/admin/question/${itemToDelete.value}`);
+  showDeleteModal.value = false;
+  await loadItems();
+}
+
+const openDeleteModal = (id) => {
+  itemToDelete.value = id;
+  showDeleteModal.value = true;
+}
+
+const closeDeleteModal = () => {
+  showDeleteModal.value = false;
+  itemToDelete.value = null;
+}
+
 watch(() => route.query.page, async (newPage) => {
     page.value = +newPage || 1;
     await loadItems();
@@ -70,7 +88,10 @@ watch(() => route.query.page, async (newPage) => {
           <p class="question-text">{{ item.question_text }}</p>
           <p class="formatted-date">{{ formatDate(item.created_at) }}</p>
         </div>
-        <button class="answer-btn" @click="answer(item.id)">Відповісти</button>
+        <div class="btn-container">
+          <button class="answer-btn" @click="answer(item.id)">Відповісти</button>
+          <button class="delete-button" @click="openDeleteModal(item.id)">Видалити</button>
+        </div>
       </div>
     </div>
 
@@ -78,6 +99,16 @@ watch(() => route.query.page, async (newPage) => {
       <button v-if="page > 1" @click="changePage(page - 1)" class="pagination-btn">← Попередня</button>
       <span class="page-indicator">Сторінка {{ page }}</span>
       <button v-if="items.length !== 0" @click="changePage(page + 1)" class="pagination-btn">Наступна →</button>
+    </div>
+  </div>
+
+  <div v-if="showDeleteModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Ви впевнені, що хочете видалити цей елемент?</h3>
+      <div class="modal-buttons">
+        <button @click="deleteItem" class="btn">Підтвердити</button>
+        <button @click="closeDeleteModal" class="btn">Скасувати</button>
+      </div>
     </div>
   </div>
 </template>
@@ -184,6 +215,13 @@ watch(() => route.query.page, async (newPage) => {
   margin-top: auto;
 }
 
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .answer-btn {
   background-color: #4CAF50;
   color: white;
@@ -197,6 +235,46 @@ watch(() => route.query.page, async (newPage) => {
 
 .answer-btn:hover {
   background-color: #307d31;
+}
+
+.delete-button {
+  padding: 10px 15px;
+  background-color: #ef1b1b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #ad0000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
 }
 
 .pagination {
