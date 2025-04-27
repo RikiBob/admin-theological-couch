@@ -38,6 +38,11 @@ const formatDate = (dateString) => {
     });
 };
 
+const rollbackItem = async (id) => {
+  await api.patch(`/admin/question/${id}`);
+  await loadItems();
+}
+
 watch(() => route.query.page, async (newPage) => {
     page.value = +newPage || 1;
     await loadItems();
@@ -72,6 +77,8 @@ watch(() => route.query.page, async (newPage) => {
           <a :href="item.url_answer" target="_blank">{{ item.url_answer }}</a>
           <p class="formatted-date">{{ formatDate(item.created_at) }}</p>
         </div>
+
+        <button class="rollback-btn" @click="rollbackItem(item.id)">Скасувати</button>
       </div>
     </div>
 
@@ -168,6 +175,19 @@ watch(() => route.query.page, async (newPage) => {
   min-height: 200px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rollback-btn {
+  padding: 10px 15px;
+  background-color: #ef1b1b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.rollback-btn:hover {
+  background-color: #ad0000;
 }
 
 .item-details {
