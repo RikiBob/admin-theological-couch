@@ -4,6 +4,7 @@ import {useRouter, useRoute} from "vue-router";
 import ErrorHandler from "@/components/ErrorHandler.vue";
 import { errors } from "@/helpers/errors.js";
 import {api} from "@/helpers/api.service.js";
+import GlobalLoader from "@/components/GlobalLoader.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -37,6 +38,7 @@ const logout = async () => {
 
    <div class="content-wrapper">
       <div class="info-box">
+        <GlobalLoader />
         <RouterView />
       </div>
    </div>

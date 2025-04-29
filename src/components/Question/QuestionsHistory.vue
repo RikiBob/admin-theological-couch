@@ -14,7 +14,7 @@ const routeTo = (route) => {
 }
 
 const loadItems = async () => {
-    items.value =  await api.get(`/questions/answered?page=${page.value}&sortOrder=${sortOrder.value}`);
+  items.value =  await api.get(`/questions/answered?page=${page.value}&sortOrder=${sortOrder.value}`);
 };
 
 const changePage = (newPage) => {
@@ -47,6 +47,7 @@ watch(() => route.query.page, async (newPage) => {
     page.value = +newPage || 1;
     await loadItems();
 }, { immediate: true });
+
 </script>
 
 <template>
@@ -93,6 +94,7 @@ watch(() => route.query.page, async (newPage) => {
 <style scoped>
 .content-wrapper {
   margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -102,17 +104,8 @@ watch(() => route.query.page, async (newPage) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 56%;
   margin-bottom: 50px;
-  position: relative;
-}
-
-.sort-container {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-  margin: 0 auto;
 }
 
 .btn {
@@ -130,6 +123,12 @@ watch(() => route.query.page, async (newPage) => {
 .btn:hover {
   background-color: #9e8f75;
   transform: scale(1.05);
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .sort-text {
@@ -203,7 +202,7 @@ watch(() => route.query.page, async (newPage) => {
   color: #333;
 }
 
-.question-block, .answer-block {
+.question-block {
   background-color: #e9e9e9;
   padding: 10px;
   border-radius: 8px;
@@ -216,7 +215,7 @@ watch(() => route.query.page, async (newPage) => {
   margin-bottom: 5px;
 }
 
-.question-text, .answer-text {
+.question-text {
   font-size: 18px;
   word-spacing: 3px;
 }
@@ -343,13 +342,8 @@ watch(() => route.query.page, async (newPage) => {
     font-size: 16px;
   }
 
-  .question-text, .answer-text {
+  .question-text{
     font-size: 16px;
-  }
-
-  .answer-btn {
-    padding: 8px 16px;
-    font-size: 14px;
   }
 
   .sort-container {

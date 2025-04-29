@@ -1,5 +1,6 @@
 import { errors } from '@/helpers/errors.js'
 import { router } from '@/main.js';
+import { isLoading } from "@/helpers/useGlobalLoader.js";
 
 const baseURL =  import.meta.env.VITE_SERVER_URL;
 
@@ -12,6 +13,8 @@ const refreshToken = async () => {
 
 const request = async (url, options = {}) => {
     try {
+        isLoading.value = true;
+
         const fullURL = baseURL + url;
         let response = await fetch(fullURL, {
             ...options,
@@ -53,6 +56,8 @@ const request = async (url, options = {}) => {
     } catch (error) {
         errors.value.push(error);
         throw error;
+    } finally {
+        isLoading.value = false;
     }
 };
 
