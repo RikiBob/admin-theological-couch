@@ -187,6 +187,7 @@ watch(() => route.query.page, async (newPage) => {
 
 .item {
   display: flex;
+  gap: 20px;
   align-items: flex-start;
   justify-content: space-between;
   background-color: #f5f5f5;
