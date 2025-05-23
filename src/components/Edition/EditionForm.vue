@@ -20,7 +20,7 @@ const formSubmit = async () => {
       url_video: urlVideo.value,
     };
 
-    const response = await api.post('/admin/edition', data);
+    const response = await api.post('/edition', data);
 
     if (response.ok) {
       showSuccessMessage.value = true;

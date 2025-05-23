@@ -45,7 +45,7 @@ const answer = (id) => {
 }
 
 const deleteItem = async (id) => {
-  await api.remove(`/admin/question/${itemToDelete.value}`);
+  await api.remove(`/question/${itemToDelete.value}`);
   showDeleteModal.value = false;
   await loadItems();
 }

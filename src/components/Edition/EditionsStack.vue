@@ -15,7 +15,7 @@ const loadItems = async () => {
 };
 
 const deleteItem = async () => {
-    await api.remove(`/admin/edition/${itemToDelete.value}`);
+    await api.remove(`/edition/${itemToDelete.value}`);
     showDeleteModal.value = false;
     await loadItems();
 };
