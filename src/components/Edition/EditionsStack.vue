@@ -11,11 +11,11 @@ const itemToDelete = ref(null);
 const page = ref(+route.query.page || 1);
 
 const loadItems = async () => {
-    items.value = await api.get(`/editions/all?page=${page.value}`);
+    items.value = await api.get(`/editions?page=${page.value}`);
 };
 
 const deleteItem = async () => {
-    await api.remove(`/admin/edition/${itemToDelete.value}`);
+    await api.remove(`/editions/${itemToDelete.value}`);
     showDeleteModal.value = false;
     await loadItems();
 };

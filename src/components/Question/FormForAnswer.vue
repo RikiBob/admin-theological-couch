@@ -22,7 +22,7 @@ const formSubmit = async () => {
       url: urlAnswer.value,
     };
 
-    const response = await api.patch(`/admin/answer/${idQuestion.value}`, data);
+    const response = await api.patch(`/questions/answer/${idQuestion.value}`, data);
 
      if (response.ok) {
         showSuccessMessage.value = true;

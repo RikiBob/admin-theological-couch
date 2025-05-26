@@ -39,7 +39,7 @@ const formatDate = (dateString) => {
 };
 
 const rollbackItem = async (id) => {
-  await api.patch(`/admin/question/${id}`);
+  await api.patch(`/questions/rollback/${id}`);
   await loadItems();
 }
 
